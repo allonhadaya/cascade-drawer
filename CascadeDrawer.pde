@@ -4,13 +4,14 @@ void setup() {
   
   cascade = new Cascade(
   // drawing behavior
-  new LineHandler() {
+  new Cascade.Handler() {
     @Override
-    public void draw(int c, int x1, int y1, int x2, int y2) {
+    public void handle(int c, int x1, int y1, int x2, int y2) {
       println("Drawing a line from (" + x1 + ", " + y1 + ") to (" + x2 + ", " + y2 + ") in the color, " + c + ".");
       pushStyle();
       stroke(c);
       line(x1, y1, x2, y2);
+      // mirrored over the y axis
       line(width - x1, y1, width - x2, y2);
       popStyle();
     }
