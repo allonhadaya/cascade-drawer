@@ -1,6 +1,7 @@
-import java.util.Deque;
-import java.util.ArrayDeque;
 import java.awt.Point;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 
 /**
  * A series of trails of different sizes and colors.
@@ -20,21 +21,13 @@ public class Cascade {
   private final Deque<Point> points;
 
   public Cascade(Handler handler, Trail... trails) {
-    Cascade tail = null;
-    for (int i = trails.length - 1; i >= 1; i--) {
-      tail = new Cascade(handler, trails[i], tail);
-    }
     this.handler = handler;
     this.trail = trails[0];
-    this.continuation = tail;
     this.points = new ArrayDeque(this.trail.size);
-  }
-
-  private Cascade(Handler handler, Trail trail, Cascade continuation) {
-    this.handler = handler;
-    this.trail = trail;
-    this.continuation = continuation;
-    this.points = new ArrayDeque(trail.size);
+    this.continuation = trails.length > 1 ?
+      // recurse
+      new Cascade(handler, Arrays.copyOfRange(trails, 1, trails.length)) :
+      null;
   }
 
   public void add(int x, int y) {
@@ -56,6 +49,7 @@ public class Cascade {
     if (isFull()) {
       Point old = points.removeLast();
       if (hasContinuation()) {
+        // recurse
         continuation.add(old.x, old.y);
       }
     }
