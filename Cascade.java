@@ -21,13 +21,14 @@ public class Cascade {
   private final Deque<Point> points;
 
   public Cascade(Handler handler, Trail... trails) {
+    this(handler, new ArrayDeque(Arrays.asList(trails)));
+  }
+  
+  private Cascade(Handler handler, Deque<Trail> trails) {
     this.handler = handler;
-    this.trail = trails[0];
+    this.trail = trails.removeFirst();
     this.points = new ArrayDeque(this.trail.size);
-    this.continuation = trails.length > 1 ?
-      // recurse
-      new Cascade(handler, Arrays.copyOfRange(trails, 1, trails.length)) :
-      null;
+    this.continuation = trails.isEmpty() ? null : new Cascade(handler, trails);
   }
 
   public void add(int x, int y) {
