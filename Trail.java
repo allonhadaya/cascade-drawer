@@ -14,7 +14,7 @@ class Trail {
    * @param c the color used for the terminal trail
    */
   public Trail(int c) {
-    this(1, c);
+    this(2, c);
   }
 
   /**

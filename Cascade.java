@@ -37,26 +37,36 @@ public class Cascade {
     this.points = new ArrayDeque(trail.size);
   }
 
-  private boolean hasContinuation() {
-    return continuation != null;
+  public void add(int x, int y) {
+
+    // shuffle in
+    Point oldFirst = points.peekFirst();
+    Point newFirst = new Point(x, y);
+    points.addFirst(newFirst);
+    
+    // draw
+    if (oldFirst != null) {
+      handler.handle(
+        trail.c,
+        oldFirst.x, oldFirst.y,
+        newFirst.x, newFirst.y);
+    }
+    
+    // shuffle out
+    if (isFull()) {
+      Point old = points.removeLast();
+      if (hasContinuation()) {
+        continuation.add(old.x, old.y);
+      }
+    }
   }
 
   private boolean isFull() {
     return points.size() == trail.size;
   }
 
-  public void add(int x, int y) {
-
-    Point head = points.peekFirst();
-    points.addFirst(new Point(x, y));
-    if (head != null) {
-      handler.handle(trail.c, x, y, head.x, head.y);
-    }
-
-    if (hasContinuation() && isFull()) {
-      Point out = points.removeLast();
-      continuation.add(out.x, out.y);
-    }
+  private boolean hasContinuation() {
+    return continuation != null;
   }
 }
 
