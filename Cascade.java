@@ -43,7 +43,7 @@ public class Cascade {
     Point head = points.peekFirst();
     points.addFirst(new Point(x, y));
     if (head != null) {
-      lineHandler.line(trail.c, x, y, head.x, head.y);
+      lineHandler.draw(trail.c, x, y, head.x, head.y);
     }
     
     if (hasContinuation() && isFull()) {
